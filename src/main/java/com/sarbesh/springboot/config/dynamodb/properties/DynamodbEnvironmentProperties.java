@@ -1,26 +1,19 @@
-package com.sarbesh.springboot.config.dynamodb.configuration;
+package com.sarbesh.springboot.config.dynamodb.properties;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.config.server.support.EnvironmentRepositoryProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
 /**
  * Configuration properties for the DynamoDB EnvironmentRepository.
  * Binds properties with prefix 'spring.cloud.config.server.dynamodb'.
  */
-@Configuration
 @ConfigurationProperties(prefix = "spring.cloud.config.server.dynamodb")
-@Getter
-@Setter
-public class DynamodbEnvironmentProperties implements EnvironmentRepositoryProperties, InitializingBean {
+public class DynamodbEnvironmentProperties implements EnvironmentRepositoryProperties {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final Logger LOGGER = LoggerFactory.getLogger(DynamodbEnvironmentProperties.class);
 
     /**
      * AWS region to use for DynamoDB.
@@ -51,13 +44,11 @@ public class DynamodbEnvironmentProperties implements EnvironmentRepositoryPrope
      */
     private int order = Ordered.LOWEST_PRECEDENCE;
 
-    /**
-     * Logs initialization after properties are set.
-     */
-    @Override
-    public void afterPropertiesSet() {
-        LOGGER.debug("DynamodbEnvironmentProperties initialized with properties: {}", this);
-    }
+    private String partitionKey = "config_id";
+
+    private String configAttribute = "properties";
+
+    private String delimiter = "-";
 
     /**
      * Sets the order for repository precedence.
@@ -94,5 +85,81 @@ public class DynamodbEnvironmentProperties implements EnvironmentRepositoryPrope
     public boolean hasAccessKeyAndSecretKey() {
         return this.accessKey != null && !this.accessKey.isBlank()
                 && this.secretKey != null && !this.secretKey.isBlank();
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
+    }
+
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public String getPartitionKey() {
+        return partitionKey;
+    }
+
+    public void setPartitionKey(String partitionKey) {
+        this.partitionKey = partitionKey;
+    }
+
+    public String getConfigAttribute() {
+        return configAttribute;
+    }
+
+    public void setConfigAttribute(String configAttribute) {
+        this.configAttribute = configAttribute;
+    }
+
+    public String getDelimiter() {
+        return delimiter;
+    }
+
+    public void setDelimiter(String dilimiter) {
+        this.delimiter = dilimiter;
     }
 }

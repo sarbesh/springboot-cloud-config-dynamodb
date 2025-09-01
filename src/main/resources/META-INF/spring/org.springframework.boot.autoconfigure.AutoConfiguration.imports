@@ -1,1 +1,1 @@
-com.sarbesh.springboot.config.dynamodb.DynamodbEnvironmentRepositoryAutoConfiguration
+com.sarbesh.springboot.config.dynamodb.configuration.DynamodbEnvironmentRepositoryAutoConfiguration
