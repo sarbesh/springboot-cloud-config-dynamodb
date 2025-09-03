@@ -1,0 +1,47 @@
+# Example Spring Cloud Config Server application.yml
+# This shows how to properly configure the DynamoDB environment repository with COMPOSITE configuration
+
+spring:
+  application:
+    name: config-server
+  
+  # CRITICAL: Activate the dynamodb profile for the library to work
+  profiles:
+    active: dynamodb
+
+  cloud:
+    config:
+      server:
+        # Bootstrap configuration (REQUIRED for composite setup)
+        bootstrap: true
+        
+        # COMPOSITE configuration format (REQUIRED for multiple backends)
+        composite:
+          - type: dynamodb           # Use 'dynamodb' as the type
+            region: us-east-1
+            table: config_table
+            
+            # Optional AWS credentials (prefer IAM roles in production)
+            access-key: ${AWS_ACCESS_KEY:}
+            secret-key: ${AWS_SECRET_KEY:}
+            
+            # Optional DynamoDB table structure customization
+            partition-key: config_id        # Default: config_id
+            config-attribute: properties    # Default: properties
+            delimiter: "-"                  # Default: -
+            
+            # Optional connection settings
+            connection-timeout: 10000       # Default: 10000ms
+            timeout: 50000                  # Default: 50000ms
+            
+            # Repository order (for composite configurations)
+            order: 1
+
+server:
+  port: 8888
+
+# Logging configuration for debugging
+logging:
+  level:
+    com.sarbesh.springboot.config.dynamodb: DEBUG
+    org.springframework.cloud.config: DEBUG

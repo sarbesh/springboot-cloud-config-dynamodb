@@ -1,0 +1,2 @@
+# Bootstrap configuration for early factory registration in bootstrap context
+org.springframework.cloud.bootstrap.BootstrapConfiguration=com.sarbesh.springboot.config.dynamodb.configuration.DynamodbEnvironmentRepositoryAutoConfiguration$DynamodbBootstrapConfiguration

@@ -1,0 +1,45 @@
+# Example Bootstrap Configuration for Spring Cloud Config Server
+# This shows how to use the spring-cloud-config-dynamodb library with bootstrap=true
+
+spring:
+  profiles:
+    active: dynamodb  # Enable DynamoDB profile
+  cloud:
+    config:
+      server:
+        bootstrap: true  # Enable bootstrap mode (critical for factory registration)
+        
+        # Composite configuration - supports multiple backends
+        composite:
+          # DynamoDB as primary config source
+          - type: dynamodb
+            region: ${AWS_REGION:us-east-1}
+            table: ${DYNAMODB_TABLE:config_table}
+            access-key: ${AWS_ACCESS_KEY:}
+            secret-key: ${AWS_SECRET_KEY:}
+            partition-key: ${DYNAMODB_PARTITION_KEY:config_id}
+            config-attribute: ${DYNAMODB_CONFIG_ATTR:properties}
+            delimiter: ${DYNAMODB_DELIMITER:-}
+            order: 1
+
+          # Native as fallback config source  
+          - type: native
+            search-locations: ${CONFIG_SEARCH_LOCATIONS:classpath:/config}
+            order: 2
+
+# Server configuration
+server:
+  port: ${CONFIG_SERVER_PORT:8888}
+
+# Logging configuration  
+logging:
+  level:
+    com.sarbesh.springboot.config.dynamodb: ${LOG_LEVEL_DYNAMODB:DEBUG}
+    org.springframework.cloud.config: ${LOG_LEVEL_CONFIG:INFO}
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env
